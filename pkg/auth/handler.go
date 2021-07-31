@@ -90,6 +90,12 @@ func Register(s Service) http.HandlerFunc {
 			return
 		}
 
+		if len(data.Password) < 8 {
+			oplog.Warn().Msgf("Password is too short, must be at least 8 characters.")
+			render.Render(w, r, ErrInvalidRequest(err))
+			return
+		}
+
 		err = s.createUser(data.Username, data.Password, regular)
 		if err != nil {
 			oplog.Error().Err(err).Msgf("Couldn't create user")

@@ -50,7 +50,7 @@
 #### Authentication
 - [x] register with username and password and registration code
 - [ ] username must be unique and password must be complex
-- [ ] password is saved using bcrypt
+- [x] password is saved using bcrypt
 - [x] login with username and password
 - [x] receive jwt after successful login, 24hr expiration
 - [x] api endpoints authenticate calls using jwt claims
