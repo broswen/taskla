@@ -7,13 +7,14 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/broswen/taskla/pkg/storage"
 )
 
+// TODO get secret from outside of applicatoin
 const SECRETSTRING = "TODOSECRETSTRING"
 
-// TODO add dependency to storage to query
 type Service struct {
 	r storage.Repository
 }
@@ -77,7 +78,11 @@ func (s Service) Register(username, password, code string) error {
 }
 
 func (s Service) createUser(username, password string, role UserRole) error {
-	_, err := s.r.Db.Exec("INSERT INTO users (username, password, role) VALUES ($1, $2, $3)", username, password, role)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MaxCost)
+	if err != nil {
+		return err
+	}
+	_, err = s.r.Db.Exec("INSERT INTO users (username, password, role) VALUES ($1, $2, $3)", username, string(hashedPassword), role)
 	if err != nil {
 		return err
 	}
@@ -101,7 +106,7 @@ func (s Service) Login(username, password string) (string, error) {
 		return "", err
 	}
 
-	if password != user.Password {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return "", fmt.Errorf("password doesn't match")
 	}
 	claims := &jwt.StandardClaims{

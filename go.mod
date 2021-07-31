@@ -9,4 +9,5 @@ require (
 	github.com/golang-jwt/jwt v3.2.1+incompatible
 	github.com/lib/pq v1.10.2
 	github.com/rs/zerolog v1.23.0
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 )
