@@ -1,9 +1,10 @@
 ## Taskla
 
-Taskla is a REST API backend written in Go with using the Chi router.
+Taskla is a REST API backend created using [Go](https://golang.org/) and the [chi](https://github.com/go-chi/chi) router module.
 
-User passwords are stored after being hashed with bcrypt and users receive a JWT to authenticate API calls after logging in.
+User passwords are stored after being hashed with [bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt). Users receive a [JWT](https://pkg.go.dev/github.com/golang-jwt/jwt) to authenticate API calls after logging in.
 
+Data is stored in a postgres database using the [pq](https://pkg.go.dev/github.com/lib/pq) module
 
 ### TODO List
 
