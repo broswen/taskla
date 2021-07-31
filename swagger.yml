@@ -1,0 +1,507 @@
+openapi: 3.0.1
+info:
+  title: Taskla
+  description: Taskla
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://taskla.broswen.com/
+paths:
+  /register:
+    post:
+      tags:
+        - auth
+      summary: Register an account
+      description: Registers an account using a registration code.
+      operationId: register
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+        required: false
+      responses:
+        200:
+          description: Success, registration complete
+          content: {}
+        400:
+          description: Bad request
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      x-codegen-request-body-name: body
+  /login:
+    post:
+      tags:
+        - auth
+      summary: Login and get JWT
+      description: Login and receive JWT for authentication.
+      operationId: login
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: false
+      responses:
+        200:
+          description: Login success
+          content: {}
+        400:
+          description: Bad request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+      x-codegen-request-body-name: body
+  /group:
+    get:
+      tags:
+        - group
+      summary: Get all groups
+      description: Returns all groups for the user.
+      operationId: getGroups
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGroupsResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - group
+      summary: Create a group
+      description: Create a group for the user and return it.
+      operationId: createGroup
+      requestBody:
+        required: true
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupRequest"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        400:
+          description: Invalid request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+  /group/{id}:
+    get:
+      tags:
+        - group
+      summary: Get group by id
+      description: Returns group with id for user.
+      operationId: getGroup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - group
+      summary: Update group by id
+      description: Returns group with id for user.
+      operationId: updateGroup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupRequest"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - group
+      summary: Delete group by id
+      description: Returns group with id for user.
+      operationId: deleteGroup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+
+  /group/{id}/task:
+    get:
+      tags:
+        - group
+      summary: Get tasks for a group
+      description: Returns tasks for a group for user.
+      operationId: getTasksByGroup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTasksResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+
+  /task:
+    get:
+      tags:
+        - task
+      summary: Get all tasks
+      description: Returns all tasks for the user.
+      operationId: getTasks
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTasksResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - task
+      summary: Create a task
+      description: Create a task for the user and group, then return it.
+      operationId: createTask
+      requestBody:
+        required: true
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTaskRequest"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        400:
+          description: Invalid request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+  /task/{id}:
+    get:
+      tags:
+        - task
+      summary: Get task by id
+      description: Returns task with id for user.
+      operationId: getTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - task
+      summary: Update task by id
+      description: Returns task with id for user.
+      operationId: updateTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTaskRequest"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - task
+      summary: Delete task by id
+      description: Returns task with id for user.
+      operationId: deleteTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        401:
+          description: Unauthorized
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      security:
+        - bearerAuth: []
+
+components:
+  schemas:
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    NewGroup:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        group_id:
+          type: integer
+        username:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+    NewTask:
+      type: object
+      properties:
+        group_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+    RegisterUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        passsword:
+          type: string
+        code:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    GetGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/Group"
+    GetTasksResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+    GroupResponse:
+      type: object
+      properties:
+        group:
+          $ref: "#/components/schemas/Group"
+    TaskResponse:
+      type: object
+      properties:
+        group:
+          $ref: "#/components/schemas/Task"
+    UpdateGroupRequest:
+      type: object
+      properties:
+        schema:
+          $ref: "#/components/schemas/NewGroup"
+    CreateGroupRequest:
+      type: object
+      properties:
+        schema:
+          $ref: "#/components/schemas/NewGroup"
+    UpdateTaskRequest:
+      type: object
+      properties:
+        schema:
+          $ref: "#/components/schemas/NewTask"
+    CreateTaskRequest:
+      type: object
+      properties:
+        schema:
+          $ref: "#/components/schemas/NewTask"
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
