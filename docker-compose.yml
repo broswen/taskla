@@ -2,17 +2,30 @@
 version: '3.1'
 
 services:
+  taskla:
+    build: .
+    image: taskla
+    command: sh -c "
+      sleep 6 &&
+      ./taskla"
+    depends_on: 
+      - postgres
+    ports:
+      - 8080:8080
 
   postgres:
     image: postgres
     environment:
       POSTGRES_PASSWORD: password
-    ports:
-      - 5432:5432
+    # ports:
+    #   - 5432:5432
+
   pgadmin:
     image: dpage/pgadmin4
     environment: 
-      PGADMIN_DEFAULT_EMAIL: broswen@gmail.com
+      PGADMIN_DEFAULT_EMAIL: user@test.com
       PGADMIN_DEFAULT_PASSWORD: password
     ports:
       - 80:80
+    depends_on: 
+      - postgres

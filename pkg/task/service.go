@@ -32,6 +32,7 @@ type Task struct {
 
 func (s Service) GetTasksByUser(username string) ([]Task, error) {
 	rows, err := s.r.Db.Query("SELECT * FROM tasks WHERE username = $1", username)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -90,6 +91,7 @@ func (s Service) DeleteTask(task Task) (Task, error) {
 
 func (s Service) GetTasksByGroup(group group.Group) ([]Task, error) {
 	rows, err := s.r.Db.Query("SELECT * FROM tasks WHERE username = $1 AND group_id = $2", group.Username, group.GroupId)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}

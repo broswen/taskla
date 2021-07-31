@@ -14,6 +14,7 @@ type Repository struct {
 
 func NewPostgres() (Repository, error) {
 	connStr := "user=postgres password=password dbname=postgres port=5432 sslmode=disable"
+	log.Info().Msgf("Connecting with: %v", connStr)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Error().Err(err).Msgf("Couldn't open postgres")

@@ -29,6 +29,7 @@ type Group struct {
 
 func (s Service) GetGroupsByUser(username string) ([]Group, error) {
 	rows, err := s.r.Db.Query("SELECT * FROM groups WHERE username = $1", username)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
