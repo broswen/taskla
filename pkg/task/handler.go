@@ -225,7 +225,7 @@ func GetTasksByGroup(s Service, gs group.Service) http.HandlerFunc {
 			}
 
 			render.Render(w, r, &GetTasksByGroupResponse{tasks})
-
+			return
 		}
 		oplog.Error().Msgf("Missing task id")
 		render.Render(w, r, models.ErrInvalidRequest(errors.New("group id param not found")))
