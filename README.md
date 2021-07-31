@@ -36,3 +36,4 @@ Data is stored in a postgres database using the [pq](https://pkg.go.dev/github.c
 - [ ] load settings and db credentials from config file
 - [ ] reconnect db on timeout/disconnect
 - [ ] setup docker-compose for swarm
+- [ ] check all error types and provide specific HTTP responses
