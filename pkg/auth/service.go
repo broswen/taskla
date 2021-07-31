@@ -78,7 +78,7 @@ func (s Service) Register(username, password, code string) error {
 }
 
 func (s Service) createUser(username, password string, role UserRole) error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MaxCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
 		return err
 	}
@@ -121,7 +121,7 @@ func (s Service) Login(username, password string) (string, error) {
 func (s Service) CreateRegistrationCode(expiration time.Time) (RegistrationCode, error) {
 	chars := "ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789"
 	code := make([]byte, 6)
-	for i := 0; i < 6; i++ {
+	for i := range code {
 		code[i] = chars[rand.Intn(len(chars))]
 	}
 

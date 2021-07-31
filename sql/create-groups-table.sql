@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS public.groups
 );
 
 ALTER TABLE public.groups
-    OWNER to postgres;
+    OWNER to taskla;

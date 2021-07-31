@@ -69,8 +69,10 @@ func Register(s Service) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		oplog := httplog.LogEntry(r.Context())
+		oplog.Info().Msg("register 1")
 		data := &RegisterUserRequest{}
 		if err := render.Bind(r, data); err != nil {
+			log.Error().Err(err).Msgf("Couldn't bind RegisterUserRequest")
 			render.Render(w, r, ErrInvalidRequest(err))
 			return
 		}

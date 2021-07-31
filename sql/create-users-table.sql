@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS public.users
 );
 
 ALTER TABLE public.users
-    OWNER to postgres;
+    OWNER to taskla;

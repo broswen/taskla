@@ -20,4 +20,4 @@ CREATE TABLE IF NOT EXISTS public.tasks
 );
 
 ALTER TABLE public.tasks
-    OWNER to postgres;
+    OWNER to taskla;

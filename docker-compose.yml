@@ -5,6 +5,7 @@ services:
   taskla:
     build: .
     image: taskla
+    # sleep for 6 seconds before starting, wait for postgres to finish starting
     command: sh -c "
       sleep 6 &&
       ./taskla"
@@ -17,8 +18,8 @@ services:
     image: postgres
     environment:
       POSTGRES_PASSWORD: password
-    # ports:
-    #   - 5432:5432
+      POSTGRES_USER: taskla
+      POSTGRES_DB: taskla
 
   pgadmin:
     image: dpage/pgadmin4

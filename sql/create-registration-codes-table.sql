@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS public.registration_codes
 );
 
 ALTER TABLE public.registration_codes
-    OWNER to postgres;
+    OWNER to taskla;
