@@ -37,5 +37,5 @@ Data is stored in a postgres database using the [pq](https://pkg.go.dev/github.c
 ### MISC
 - [ ] load settings from config file
 - [x] set db credentials from environment variables
-- [ ] reconnect db on timeout/disconnect
+- [x] reconnect db on timeout/disconnect
 - [ ] check all error types and provide specific HTTP responses
