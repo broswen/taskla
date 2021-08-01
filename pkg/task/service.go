@@ -30,12 +30,12 @@ type Task struct {
 	Username    string `json:"username"`
 }
 
-func (s Service) GetTasksByUser(username string) ([]Task, error) {
-	rows, err := s.r.Db.Query("SELECT * FROM tasks WHERE username = $1", username)
-	defer rows.Close()
+func (s Service) GetTasksByUser(username string, limit, offset int) ([]Task, error) {
+	rows, err := s.r.Db.Query("SELECT * FROM tasks WHERE username = $1 ORDER BY id LIMIT $2 OFFSET $3", username, limit, offset)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	tasks := make([]Task, 0)
 	for rows.Next() {
@@ -49,9 +49,9 @@ func (s Service) GetTasksByUser(username string) ([]Task, error) {
 	return tasks, nil
 }
 
-func (s Service) GetTask(groupId int64) (Task, error) {
+func (s Service) GetTask(username string, id int64) (Task, error) {
 	var task Task
-	err := s.r.Db.QueryRow("SELECT * FROM tasks WHERE id = $1", groupId).Scan(&task.TaskId, &task.Username, &task.GroupId, &task.Name, &task.Description, &task.Status)
+	err := s.r.Db.QueryRow("SELECT * FROM tasks WHERE username = $1 AND id = $2", username, id).Scan(&task.TaskId, &task.Username, &task.GroupId, &task.Name, &task.Description, &task.Status)
 	if err != nil {
 		return Task{}, err
 	}
@@ -89,12 +89,12 @@ func (s Service) DeleteTask(task Task) (Task, error) {
 	return deletedTask, nil
 }
 
-func (s Service) GetTasksByGroup(group group.Group) ([]Task, error) {
-	rows, err := s.r.Db.Query("SELECT * FROM tasks WHERE username = $1 AND group_id = $2", group.Username, group.GroupId)
-	defer rows.Close()
+func (s Service) GetTasksByGroup(group group.Group, limit, offset int) ([]Task, error) {
+	rows, err := s.r.Db.Query("SELECT * FROM tasks WHERE username = $1 AND group_id = $2 ORDER BY id LIMIT $3 OFFSET $4", group.Username, group.GroupId, limit, offset)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	tasks := make([]Task, 0)
 	for rows.Next() {

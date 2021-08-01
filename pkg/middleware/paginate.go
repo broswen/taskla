@@ -13,11 +13,11 @@ const (
 
 func Paginate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		limit, err := strconv.ParseInt(r.URL.Query().Get("limit"), 10, 64)
+		limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 		if err != nil {
 			limit = DefaultLimit
 		}
-		offset, err := strconv.ParseInt(r.URL.Query().Get("offset"), 10, 64)
+		offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
 		if err != nil {
 			offset = DefaultOffset
 		}

@@ -23,9 +23,12 @@ func (gt *GetTasksResponse) Render(w http.ResponseWriter, r *http.Request) error
 func Get(s Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		oplog := httplog.LogEntry(r.Context())
-		tasks, err := s.GetTasksByUser(r.Context().Value("subject").(string))
+		offset := r.Context().Value("offset").(int)
+		limit := r.Context().Value("limit").(int)
+		subject := r.Context().Value("subject").(string)
+		tasks, err := s.GetTasksByUser(subject, limit, offset)
 		if err != nil {
-			oplog.Error().Err(err).Msgf("Couldn't get user tasks: %v", r.Context().Value("subject").(string))
+			oplog.Error().Err(err).Msgf("Couldn't get user tasks: %v", subject)
 			render.Render(w, r, models.ErrInternalServer(err))
 			return
 		}
@@ -44,6 +47,7 @@ func (gt *GetTaskResponse) Render(w http.ResponseWriter, r *http.Request) error 
 func GetById(s Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		oplog := httplog.LogEntry(r.Context())
+		subject := r.Context().Value("subject").(string)
 		var task Task
 		if id := chi.URLParam(r, "id"); id != "" {
 			taskId, err := strconv.ParseInt(id, 10, 64)
@@ -52,7 +56,7 @@ func GetById(s Service) http.HandlerFunc {
 				render.Render(w, r, models.ErrInvalidRequest(err))
 				return
 			}
-			task, err = s.GetTask(taskId)
+			task, err = s.GetTask(subject, taskId)
 			if err != nil {
 				oplog.Error().Err(err).Msgf("Couldn't get task: %v", taskId)
 				render.Render(w, r, models.ErrNotFound(err))
@@ -203,6 +207,9 @@ func (gt *GetTasksByGroupResponse) Render(w http.ResponseWriter, r *http.Request
 func GetTasksByGroup(s Service, gs group.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		oplog := httplog.LogEntry(r.Context())
+		offset := r.Context().Value("offset").(int)
+		limit := r.Context().Value("limit").(int)
+		subject := r.Context().Value("subject").(string)
 		var group group.Group
 		if id := chi.URLParam(r, "id"); id != "" {
 			groupId, err := strconv.ParseInt(id, 10, 64)
@@ -211,13 +218,13 @@ func GetTasksByGroup(s Service, gs group.Service) http.HandlerFunc {
 				render.Render(w, r, models.ErrInvalidRequest(err))
 				return
 			}
-			group, err = gs.GetGroup(groupId)
+			group, err = gs.GetGroup(groupId, subject)
 			if err != nil {
 				oplog.Error().Err(err).Msgf("Couldn't get group id: %v", groupId)
 				render.Render(w, r, models.ErrNotFound(err))
 				return
 			}
-			tasks, err := s.GetTasksByGroup(group)
+			tasks, err := s.GetTasksByGroup(group, limit, offset)
 			if err != nil {
 				oplog.Error().Err(err).Msgf("Couldn't get tasks for group: %v", groupId)
 				render.Render(w, r, models.ErrInternalServer(err))

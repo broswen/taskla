@@ -21,16 +21,16 @@ Data is stored in a postgres database using the [pq](https://pkg.go.dev/github.c
 #### Groups
 - [x] create groups with id, title, description, created date
 - [x] list groups by user (jwt claims)
-- [ ] paginate groups, page, limit
+- [x] paginate groups, page, limit
 - [x] update groups title, description
 - [x] delete groups by id, (cascade associated tasks)
 
 #### Tasks
 - [x] create task with id, group id, title, description, status, created date
 - [x] list tasks by user
-    - [ ] paginate tasks, page, limit
+    - [x] paginate tasks, page, limit
 - [x] list tasks by group (by user)
-    - [ ] paginate tasks, page, limit
+    - [x] paginate tasks, page, limit
 - [x] update task title, group id, description, status
 - [x] delete task by id
 

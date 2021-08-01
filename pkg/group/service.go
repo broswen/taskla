@@ -27,12 +27,12 @@ type Group struct {
 	Username    string `json:"username"`
 }
 
-func (s Service) GetGroupsByUser(username string) ([]Group, error) {
-	rows, err := s.r.Db.Query("SELECT * FROM groups WHERE username = $1", username)
-	defer rows.Close()
+func (s Service) GetGroupsByUser(username string, limit, offset int) ([]Group, error) {
+	rows, err := s.r.Db.Query("SELECT * FROM groups WHERE username = $1 ORDER BY id LIMIT $2 OFFSET $3", username, limit, offset)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	groups := make([]Group, 0)
 	for rows.Next() {
@@ -46,9 +46,9 @@ func (s Service) GetGroupsByUser(username string) ([]Group, error) {
 	return groups, nil
 }
 
-func (s Service) GetGroup(groupId int64) (Group, error) {
+func (s Service) GetGroup(groupId int64, username string) (Group, error) {
 	var group Group
-	err := s.r.Db.QueryRow("SELECT * FROM groups WHERE id = $1", groupId).Scan(&group.GroupId, &group.Username, &group.Name, &group.Description)
+	err := s.r.Db.QueryRow("SELECT * FROM groups WHERE id = $1 AND username = $2", groupId, username).Scan(&group.GroupId, &group.Username, &group.Name, &group.Description)
 	if err != nil {
 		return Group{}, err
 	}

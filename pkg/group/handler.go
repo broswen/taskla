@@ -22,9 +22,12 @@ func (gg *GetGroupsResponse) Render(w http.ResponseWriter, r *http.Request) erro
 func Get(s Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		oplog := httplog.LogEntry(r.Context())
-		groups, err := s.GetGroupsByUser(r.Context().Value("subject").(string))
+		offset := r.Context().Value("offset").(int)
+		limit := r.Context().Value("limit").(int)
+		subject := r.Context().Value("subject").(string)
+		groups, err := s.GetGroupsByUser(subject, limit, offset)
 		if err != nil {
-			oplog.Error().Err(err).Msgf("Couldn't get groups for user: %v", r.Context().Value("subject").(string))
+			oplog.Error().Err(err).Msgf("Couldn't get groups for user: %v", subject)
 			render.Render(w, r, models.ErrInternalServer(err))
 			return
 		}
@@ -43,6 +46,7 @@ func (gg *GetGroupResponse) Render(w http.ResponseWriter, r *http.Request) error
 func GetById(s Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		oplog := httplog.LogEntry(r.Context())
+		subject := r.Context().Value("subject").(string)
 		var group Group
 		if id := chi.URLParam(r, "id"); id != "" {
 			groupId, err := strconv.ParseInt(id, 10, 64)
@@ -51,7 +55,7 @@ func GetById(s Service) http.HandlerFunc {
 				render.Render(w, r, models.ErrInvalidRequest(err))
 				return
 			}
-			group, err = s.GetGroup(groupId)
+			group, err = s.GetGroup(groupId, subject)
 			if err != nil {
 				oplog.Error().Err(err).Msgf("Couldn't get group: %v", groupId)
 				render.Render(w, r, models.ErrNotFound(err))
