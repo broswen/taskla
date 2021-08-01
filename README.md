@@ -33,7 +33,7 @@ Data is stored in a postgres database using the [pq](https://pkg.go.dev/github.c
 - [x] delete task by id
 
 ### MISC
-- [ ] load settings and db credentials from config file
+- [ ] load settings from config file
+- [x] set db credentials from environment variables
 - [ ] reconnect db on timeout/disconnect
-- [ ] setup docker-compose for swarm
 - [ ] check all error types and provide specific HTTP responses
