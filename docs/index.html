@@ -2504,7 +2504,7 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Group-getGroups-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://taskla.broswen.com//group"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://taskla.broswen.com//group?limit=&offset="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Group-getGroups-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2522,8 +2522,10 @@ public class GroupApiExample {
 
 
         GroupApi apiInstance = new GroupApi();
+        Integer limit = 56; // Integer | 
+        Integer offset = 56; // Integer | 
         try {
-            GetGroupsResponse result = apiInstance.getGroups();
+            GetGroupsResponse result = apiInstance.getGroups(limit, offset);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GroupApi#getGroups");
@@ -2540,8 +2542,10 @@ public class GroupApiExample {
 
     public static void main(String[] args) {
         GroupApi apiInstance = new GroupApi();
+        Integer limit = 56; // Integer | 
+        Integer offset = 56; // Integer | 
         try {
-            GetGroupsResponse result = apiInstance.getGroups();
+            GetGroupsResponse result = apiInstance.getGroups(limit, offset);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GroupApi#getGroups");
@@ -2556,12 +2560,15 @@ public class GroupApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Group-getGroups-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+Integer *limit = 56; //  (optional)
+Integer *offset = 56; //  (optional)
 
 GroupApi *apiInstance = [[GroupApi alloc] init];
 
 // Get all groups
-[apiInstance getGroupsWithCompletionHandler: 
-              ^(GetGroupsResponse output, NSError* error) {
+[apiInstance getGroupsWith:limit
+    offset:offset
+              completionHandler: ^(GetGroupsResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -2578,6 +2585,10 @@ var defaultClient = Taskla.ApiClient.instance;
 
 
 var api = new Taskla.GroupApi()
+var opts = { 
+  'limit': 56, // {{Integer}} 
+  'offset': 56 // {{Integer}} 
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -2585,7 +2596,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getGroups(callback);
+api.getGroups(opts, callback);
 </code></pre>
                             </div>
 
@@ -2608,11 +2619,13 @@ namespace Example
 
 
             var apiInstance = new GroupApi();
+            var limit = 56;  // Integer |  (optional) 
+            var offset = 56;  // Integer |  (optional) 
 
             try
             {
                 // Get all groups
-                GetGroupsResponse result = apiInstance.getGroups();
+                GetGroupsResponse result = apiInstance.getGroups(limit, offset);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2631,9 +2644,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 $api_instance = new Swagger\Client\ApiGroupApi();
+$limit = 56; // Integer | 
+$offset = 56; // Integer | 
 
 try {
-    $result = $api_instance->getGroups();
+    $result = $api_instance->getGroups($limit, $offset);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling GroupApi->getGroups: ', $e->getMessage(), PHP_EOL;
@@ -2648,9 +2663,11 @@ use WWW::SwaggerClient::GroupApi;
 
 
 my $api_instance = WWW::SwaggerClient::GroupApi->new();
+my $limit = 56; # Integer | 
+my $offset = 56; # Integer | 
 
 eval { 
-    my $result = $api_instance->getGroups();
+    my $result = $api_instance->getGroups(limit => $limit, offset => $offset);
     print Dumper($result);
 };
 if ($@) {
@@ -2668,10 +2685,12 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.GroupApi()
+limit = 56 # Integer |  (optional)
+offset = 56 # Integer |  (optional)
 
 try: 
     # Get all groups
-    api_response = api_instance.get_groups()
+    api_response = api_instance.get_groups(limit=limit, offset=offset)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling GroupApi->getGroups: %s\n" % e)</code></pre>
@@ -2684,6 +2703,45 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">limit</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_getGroups_limit">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">offset</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_getGroups_offset">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - successful operation </h3>
@@ -2785,7 +2843,7 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Group-getTasksByGroup-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://taskla.broswen.com//group/{id}/task"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://taskla.broswen.com//group/{id}/task?limit=&offset="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Group-getTasksByGroup-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2804,8 +2862,10 @@ public class GroupApiExample {
 
         GroupApi apiInstance = new GroupApi();
         Integer id = 56; // Integer | 
+        Integer limit = 56; // Integer | 
+        Integer offset = 56; // Integer | 
         try {
-            GetTasksResponse result = apiInstance.getTasksByGroup(id);
+            GetTasksResponse result = apiInstance.getTasksByGroup(id, limit, offset);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GroupApi#getTasksByGroup");
@@ -2823,8 +2883,10 @@ public class GroupApiExample {
     public static void main(String[] args) {
         GroupApi apiInstance = new GroupApi();
         Integer id = 56; // Integer | 
+        Integer limit = 56; // Integer | 
+        Integer offset = 56; // Integer | 
         try {
-            GetTasksResponse result = apiInstance.getTasksByGroup(id);
+            GetTasksResponse result = apiInstance.getTasksByGroup(id, limit, offset);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GroupApi#getTasksByGroup");
@@ -2840,11 +2902,15 @@ public class GroupApiExample {
                             <div class="tab-pane" id="examples-Group-getTasksByGroup-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
 Integer *id = 56; // 
+Integer *limit = 56; //  (optional)
+Integer *offset = 56; //  (optional)
 
 GroupApi *apiInstance = [[GroupApi alloc] init];
 
 // Get tasks for a group
 [apiInstance getTasksByGroupWith:id
+    limit:limit
+    offset:offset
               completionHandler: ^(GetTasksResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2863,7 +2929,10 @@ var defaultClient = Taskla.ApiClient.instance;
 
 var api = new Taskla.GroupApi()
 var id = 56; // {{Integer}} 
-
+var opts = { 
+  'limit': 56, // {{Integer}} 
+  'offset': 56 // {{Integer}} 
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -2871,7 +2940,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getTasksByGroup(id, callback);
+api.getTasksByGroup(id, opts, callback);
 </code></pre>
                             </div>
 
@@ -2895,11 +2964,13 @@ namespace Example
 
             var apiInstance = new GroupApi();
             var id = 56;  // Integer | 
+            var limit = 56;  // Integer |  (optional) 
+            var offset = 56;  // Integer |  (optional) 
 
             try
             {
                 // Get tasks for a group
-                GetTasksResponse result = apiInstance.getTasksByGroup(id);
+                GetTasksResponse result = apiInstance.getTasksByGroup(id, limit, offset);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2919,9 +2990,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiGroupApi();
 $id = 56; // Integer | 
+$limit = 56; // Integer | 
+$offset = 56; // Integer | 
 
 try {
-    $result = $api_instance->getTasksByGroup($id);
+    $result = $api_instance->getTasksByGroup($id, $limit, $offset);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling GroupApi->getTasksByGroup: ', $e->getMessage(), PHP_EOL;
@@ -2937,9 +3010,11 @@ use WWW::SwaggerClient::GroupApi;
 
 my $api_instance = WWW::SwaggerClient::GroupApi->new();
 my $id = 56; # Integer | 
+my $limit = 56; # Integer | 
+my $offset = 56; # Integer | 
 
 eval { 
-    my $result = $api_instance->getTasksByGroup(id => $id);
+    my $result = $api_instance->getTasksByGroup(id => $id, limit => $limit, offset => $offset);
     print Dumper($result);
 };
 if ($@) {
@@ -2958,10 +3033,12 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.GroupApi()
 id = 56 # Integer | 
+limit = 56 # Integer |  (optional)
+offset = 56 # Integer |  (optional)
 
 try: 
     # Get tasks for a group
-    api_response = api_instance.get_tasks_by_group(id)
+    api_response = api_instance.get_tasks_by_group(id, limit=limit, offset=offset)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling GroupApi->getTasksByGroup: %s\n" % e)</code></pre>
@@ -3000,6 +3077,45 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">limit</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_getTasksByGroup_limit">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">offset</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_getTasksByGroup_offset">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - successful operation </h3>
@@ -4479,7 +4595,7 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Task-getTasks-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://taskla.broswen.com//task"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://taskla.broswen.com//task?limit=&offset="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Task-getTasks-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4497,8 +4613,10 @@ public class TaskApiExample {
 
 
         TaskApi apiInstance = new TaskApi();
+        Integer limit = 56; // Integer | 
+        Integer offset = 56; // Integer | 
         try {
-            GetTasksResponse result = apiInstance.getTasks();
+            GetTasksResponse result = apiInstance.getTasks(limit, offset);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling TaskApi#getTasks");
@@ -4515,8 +4633,10 @@ public class TaskApiExample {
 
     public static void main(String[] args) {
         TaskApi apiInstance = new TaskApi();
+        Integer limit = 56; // Integer | 
+        Integer offset = 56; // Integer | 
         try {
-            GetTasksResponse result = apiInstance.getTasks();
+            GetTasksResponse result = apiInstance.getTasks(limit, offset);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling TaskApi#getTasks");
@@ -4531,12 +4651,15 @@ public class TaskApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Task-getTasks-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+Integer *limit = 56; //  (optional)
+Integer *offset = 56; //  (optional)
 
 TaskApi *apiInstance = [[TaskApi alloc] init];
 
 // Get all tasks
-[apiInstance getTasksWithCompletionHandler: 
-              ^(GetTasksResponse output, NSError* error) {
+[apiInstance getTasksWith:limit
+    offset:offset
+              completionHandler: ^(GetTasksResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -4553,6 +4676,10 @@ var defaultClient = Taskla.ApiClient.instance;
 
 
 var api = new Taskla.TaskApi()
+var opts = { 
+  'limit': 56, // {{Integer}} 
+  'offset': 56 // {{Integer}} 
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -4560,7 +4687,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getTasks(callback);
+api.getTasks(opts, callback);
 </code></pre>
                             </div>
 
@@ -4583,11 +4710,13 @@ namespace Example
 
 
             var apiInstance = new TaskApi();
+            var limit = 56;  // Integer |  (optional) 
+            var offset = 56;  // Integer |  (optional) 
 
             try
             {
                 // Get all tasks
-                GetTasksResponse result = apiInstance.getTasks();
+                GetTasksResponse result = apiInstance.getTasks(limit, offset);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4606,9 +4735,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 $api_instance = new Swagger\Client\ApiTaskApi();
+$limit = 56; // Integer | 
+$offset = 56; // Integer | 
 
 try {
-    $result = $api_instance->getTasks();
+    $result = $api_instance->getTasks($limit, $offset);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling TaskApi->getTasks: ', $e->getMessage(), PHP_EOL;
@@ -4623,9 +4754,11 @@ use WWW::SwaggerClient::TaskApi;
 
 
 my $api_instance = WWW::SwaggerClient::TaskApi->new();
+my $limit = 56; # Integer | 
+my $offset = 56; # Integer | 
 
 eval { 
-    my $result = $api_instance->getTasks();
+    my $result = $api_instance->getTasks(limit => $limit, offset => $offset);
     print Dumper($result);
 };
 if ($@) {
@@ -4643,10 +4776,12 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.TaskApi()
+limit = 56 # Integer |  (optional)
+offset = 56 # Integer |  (optional)
 
 try: 
     # Get all tasks
-    api_response = api_instance.get_tasks()
+    api_response = api_instance.get_tasks(limit=limit, offset=offset)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling TaskApi->getTasks: %s\n" % e)</code></pre>
@@ -4659,6 +4794,45 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">limit</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_getTasks_limit">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">offset</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_getTasks_offset">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - successful operation </h3>

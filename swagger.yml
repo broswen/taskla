@@ -61,6 +61,19 @@ paths:
       summary: Get all groups
       description: Returns all groups for the user.
       operationId: getGroups
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+            example: 30
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+            example: 0
       responses:
         200:
           description: successful operation
@@ -219,6 +232,18 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+            example: 30
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+            example: 0
       responses:
         200:
           description: successful operation
@@ -245,6 +270,19 @@ paths:
       summary: Get all tasks
       description: Returns all tasks for the user.
       operationId: getTasks
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+            example: 30
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+            example: 0
       responses:
         200:
           description: successful operation
