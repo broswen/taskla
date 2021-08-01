@@ -8,6 +8,12 @@ services:
     command: sh -c "
       sleep 6 &&
       ./taskla"
+    environment: 
+      - DB_HOST=postgres
+      - DB_NAME=taskla
+      - DB_USER=taskla
+      - DB_PASSWORD=password
+      - DB_PORT=5432
     depends_on: 
       - postgres
     ports:
