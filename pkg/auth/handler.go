@@ -7,42 +7,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/broswen/taskla/pkg/models"
 	"github.com/go-chi/httplog"
 	"github.com/go-chi/render"
 	"github.com/rs/zerolog/log"
 )
-
-type ErrResponse struct {
-	Err            error `json:"-"` // low-level runtime error
-	HTTPStatusCode int   `json:"-"` // http response status code
-
-	StatusText string `json:"status"`          // user-level status message
-	AppCode    int64  `json:"code,omitempty"`  // application-specific error code
-	ErrorText  string `json:"error,omitempty"` // application-level error message, for debugging
-}
-
-func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
-	render.Status(r, e.HTTPStatusCode)
-	return nil
-}
-
-func ErrInvalidRequest(err error) render.Renderer {
-	return &ErrResponse{
-		Err:            err,
-		HTTPStatusCode: 400,
-		StatusText:     "Invalid Request",
-		ErrorText:      err.Error(),
-	}
-}
-
-func ErrInternalServer(err error) render.Renderer {
-	return &ErrResponse{
-		Err:            err,
-		HTTPStatusCode: 500,
-		StatusText:     "Internal Server Error",
-		ErrorText:      err.Error(),
-	}
-}
 
 type RegisterUserRequest struct {
 	*User
@@ -69,44 +38,43 @@ func Register(s Service) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		oplog := httplog.LogEntry(r.Context())
-		oplog.Info().Msg("register 1")
 		data := &RegisterUserRequest{}
 		if err := render.Bind(r, data); err != nil {
 			log.Error().Err(err).Msgf("Couldn't bind RegisterUserRequest")
-			render.Render(w, r, ErrInvalidRequest(err))
+			render.Render(w, r, models.ErrInvalidRequest(err))
 			return
 		}
 
 		regCode, err := s.GetRegistrationCode(data.RegistrationCode)
 		if err != nil {
 			log.Warn().Err(err).Msgf("Registration code expired")
-			render.Render(w, r, ErrInternalServer(err))
+			render.Render(w, r, models.ErrInternalServer(err))
 			return
 		}
 
 		if regCode.Expiration.Before(time.Now()) || regCode.Used {
 			log.Warn().Err(err).Msgf("Registration code expired")
-			render.Render(w, r, ErrInvalidRequest(err))
+			render.Render(w, r, models.ErrInvalidRequest(err))
 			return
 		}
 
 		if len(data.Password) < 8 {
 			oplog.Warn().Msgf("Password is too short, must be at least 8 characters.")
-			render.Render(w, r, ErrInvalidRequest(err))
+			render.Render(w, r, models.ErrInvalidRequest(errors.New("Password must be at least 8 characters")))
 			return
 		}
 
 		err = s.createUser(data.Username, data.Password, regular)
 		if err != nil {
 			oplog.Error().Err(err).Msgf("Couldn't create user")
-			render.Render(w, r, ErrInternalServer(err))
+			render.Render(w, r, models.ErrInternalServer(err))
 			return
 		}
 
 		regCode.Used = true
 		if err := s.UpdateRegistrationCode(regCode); err != nil {
 			oplog.Error().Err(err).Msgf("Couldn't update registration code: %v", regCode)
-			render.Render(w, r, ErrInternalServer(err))
+			render.Render(w, r, models.ErrInternalServer(err))
 			return
 		}
 
@@ -145,14 +113,14 @@ func Login(s Service) http.HandlerFunc {
 		data := &LoginRequest{}
 		if err := render.Bind(r, data); err != nil {
 			oplog.Error().Err(err).Msg("Couldn't bind LoginRequest")
-			render.Render(w, r, ErrInvalidRequest(err))
+			render.Render(w, r, models.ErrInvalidRequest(err))
 			return
 		}
 
 		jwt, err := s.Login(data.Username, data.Password)
 		if err != nil {
 			oplog.Error().Err(err).Msg("Couldn't login")
-			render.Render(w, r, ErrInvalidRequest(err))
+			render.Render(w, r, models.ErrInvalidRequest(err))
 			return
 		}
 
@@ -169,14 +137,14 @@ func JWT(s Service) func(next http.Handler) http.Handler {
 			jwt := strings.Split(r.Header.Get("Authorization"), " ")[1]
 			if jwt == "" {
 				oplog.Error().Msg("Missing JWT")
-				render.Render(w, r, ErrInvalidRequest(errors.New("missing jwt")))
+				render.Render(w, r, models.ErrInvalidRequest(errors.New("missing jwt")))
 				return
 			}
 
 			claims, err := s.ValidateJWT(jwt)
 			if err != nil {
 				oplog.Error().Err(err).Msg("Invalid or expired JWT")
-				render.Render(w, r, ErrInternalServer(err))
+				render.Render(w, r, models.ErrInternalServer(err))
 				return
 			}
 
