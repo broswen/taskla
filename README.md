@@ -6,6 +6,8 @@ User passwords are stored after being hashed with [bcrypt](https://pkg.go.dev/go
 
 Data is stored in a postgres database using the [pq](https://pkg.go.dev/github.com/lib/pq) module
 
+### [Click here for API Documentation using Swagger](https://broswen.github.io/taskla/)
+
 ### TODO List
 
 #### Authentication
