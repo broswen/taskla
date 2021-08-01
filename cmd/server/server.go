@@ -6,6 +6,7 @@ import (
 
 	"github.com/broswen/taskla/pkg/auth"
 	"github.com/broswen/taskla/pkg/group"
+	"github.com/broswen/taskla/pkg/middleware"
 	"github.com/broswen/taskla/pkg/task"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog"
@@ -75,8 +76,8 @@ func (s Server) Routes() {
 	s.router.Route("/group", func(r chi.Router) {
 		r.Use(auth.JWT(s.authService))
 
-		r.Get("/", group.Get(s.groupService))
-		r.Get("/{id}/task", task.GetTasksByGroup(s.taskService, s.groupService))
+		r.With(middleware.Paginate).Get("/", group.Get(s.groupService))
+		r.With(middleware.Paginate).Get("/{id}/task", task.GetTasksByGroup(s.taskService, s.groupService))
 		r.Post("/", group.Create(s.groupService))
 		r.Get("/{id}", group.GetById(s.groupService))
 		r.Put("/{id}", group.Update(s.groupService))
@@ -86,7 +87,7 @@ func (s Server) Routes() {
 	s.router.Route("/task", func(r chi.Router) {
 		r.Use(auth.JWT(s.authService))
 
-		r.Get("/", task.Get(s.taskService))
+		r.With(middleware.Paginate).Get("/", task.Get(s.taskService))
 		r.Post("/", task.Create(s.taskService))
 		r.Get("/{id}", task.GetById(s.taskService))
 		r.Put("/{id}", task.Update(s.taskService))
