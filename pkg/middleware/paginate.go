@@ -23,7 +23,7 @@ func Paginate(next http.Handler) http.Handler {
 		}
 
 		ctx := context.WithValue(r.Context(), "limit", limit)
-		ctx = context.WithValue(r.Context(), "offset", offset)
+		ctx = context.WithValue(ctx, "offset", offset)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 
