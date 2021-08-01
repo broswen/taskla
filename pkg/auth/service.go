@@ -20,10 +20,7 @@ type Service struct {
 }
 
 func NewService() (Service, error) {
-	repo, err := storage.NewPostgres()
-	if err != nil {
-		return Service{}, fmt.Errorf("creating repository: %w", err)
-	}
+	repo := storage.New()
 	rand.Seed(time.Now().UnixNano())
 	return Service{
 		r: repo,
@@ -82,7 +79,7 @@ func (s Service) createUser(username, password string, role UserRole) error {
 	if err != nil {
 		return err
 	}
-	_, err = s.r.Db.Exec("INSERT INTO users (username, password, role) VALUES ($1, $2, $3)", username, string(hashedPassword), role)
+	_, err = s.r.DB().Exec("INSERT INTO users (username, password, role) VALUES ($1, $2, $3)", username, string(hashedPassword), role)
 	if err != nil {
 		return err
 	}
@@ -91,7 +88,7 @@ func (s Service) createUser(username, password string, role UserRole) error {
 
 func (s Service) getUser(username string) (User, error) {
 	var user User
-	err := s.r.Db.QueryRow("SELECT username, password, role FROM users WHERE username = $1", username).Scan(&user.Username, &user.Password, &user.Role)
+	err := s.r.DB().QueryRow("SELECT username, password, role FROM users WHERE username = $1", username).Scan(&user.Username, &user.Password, &user.Role)
 	if err != nil {
 		return User{}, err
 	}
@@ -126,7 +123,7 @@ func (s Service) CreateRegistrationCode(expiration time.Time) (RegistrationCode,
 	}
 
 	var regCode RegistrationCode
-	err := s.r.Db.QueryRow(
+	err := s.r.DB().QueryRow(
 		"INSERT INTO registration_codes (code, expiration, used) VALUES ($1, $2, $3) RETURNING code, expiration, used",
 		string(code), expiration, false).Scan(&regCode.Code, &regCode.Expiration, &regCode.Used)
 	if err != nil {
@@ -138,7 +135,7 @@ func (s Service) CreateRegistrationCode(expiration time.Time) (RegistrationCode,
 
 func (s Service) GetRegistrationCode(code string) (RegistrationCode, error) {
 	var regCode RegistrationCode
-	err := s.r.Db.QueryRow("SELECT * FROM registration_codes WHERE code = $1 LIMIT 1", code).Scan(&regCode.Code, &regCode.Expiration, &regCode.Used)
+	err := s.r.DB().QueryRow("SELECT * FROM registration_codes WHERE code = $1 LIMIT 1", code).Scan(&regCode.Code, &regCode.Expiration, &regCode.Used)
 	if err != nil {
 		return RegistrationCode{}, err
 	}
@@ -147,7 +144,7 @@ func (s Service) GetRegistrationCode(code string) (RegistrationCode, error) {
 }
 
 func (s Service) UpdateRegistrationCode(code RegistrationCode) error {
-	_, err := s.r.Db.Exec("UPDATE registration_codes set expiration = $2, used = $3 WHERE code = $1", code.Code, code.Expiration, code.Used)
+	_, err := s.r.DB().Exec("UPDATE registration_codes set expiration = $2, used = $3 WHERE code = $1", code.Code, code.Expiration, code.Used)
 	if err != nil {
 		return err
 	}
