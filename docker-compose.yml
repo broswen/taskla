@@ -4,9 +4,9 @@ services:
   taskla:
     build: .
     image: taskla
-    # sleep for 6 seconds before starting, wait for postgres to finish starting
+    # sleep for 4 seconds before starting, wait for postgres to finish starting
     command: sh -c "
-      sleep 6 &&
+      sleep 4 &&
       ./taskla"
     environment: 
       - DB_HOST=postgres

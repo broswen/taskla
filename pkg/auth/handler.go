@@ -124,6 +124,7 @@ func Login(s Service) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Authorization", jwt)
 		render.Render(w, r, &LoginResponse{jwt})
 	}
 }
