@@ -9,6 +9,7 @@ services:
       sleep 4 &&
       ./taskla"
     environment: 
+      - SECRET_KEY=supersecretkey
       - DB_HOST=postgres
       - DB_NAME=taskla
       - DB_USER=taskla

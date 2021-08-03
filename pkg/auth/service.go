@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -13,7 +14,7 @@ import (
 )
 
 // TODO get secret from outside of applicatoin
-const SECRETSTRING = "TODOSECRETSTRING"
+var secretKey string = os.Getenv("SECRET_KEY")
 
 type Service struct {
 	r storage.Repository
@@ -111,7 +112,7 @@ func (s Service) Login(username, password string) (string, error) {
 		Subject:   user.Username,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString([]byte(SECRETSTRING))
+	ss, err := token.SignedString([]byte(secretKey))
 	return ss, nil
 }
 
@@ -154,7 +155,7 @@ func (s Service) UpdateRegistrationCode(code RegistrationCode) error {
 
 func (s Service) ValidateJWT(tokenString string) (*jwt.StandardClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(SECRETSTRING), nil
+		return []byte(secretKey), nil
 	})
 	if err != nil {
 		return nil, err
