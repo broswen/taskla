@@ -9,6 +9,7 @@ import (
 	"github.com/broswen/taskla/pkg/middleware"
 	"github.com/broswen/taskla/pkg/task"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/httplog"
 	"github.com/go-chi/render"
 	"github.com/rs/zerolog"
@@ -61,6 +62,13 @@ func (s Server) Routes() {
 
 	s.router.Use(httplog.RequestLogger(s.logger))
 	s.router.Use(render.SetContentType(render.ContentTypeJSON))
+	s.router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 
 	// GET /ping for health check
 	s.router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {

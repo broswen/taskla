@@ -135,12 +135,13 @@ func JWT(s Service) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			oplog := httplog.LogEntry(r.Context())
-			jwt := strings.Split(r.Header.Get("Authorization"), " ")[1]
-			if jwt == "" {
+			parts := strings.Split(r.Header.Get("Authorization"), " ")
+			if len(parts) != 2 {
 				oplog.Error().Msg("Missing JWT")
 				render.Render(w, r, models.ErrInvalidRequest(errors.New("missing jwt")))
 				return
 			}
+			jwt := parts[1]
 
 			claims, err := s.ValidateJWT(jwt)
 			if err != nil {
