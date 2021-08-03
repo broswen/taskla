@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -124,7 +125,7 @@ func Login(s Service) http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Authorization", jwt)
+		w.Header().Add("Cookie", fmt.Sprintf("jwt=%s", jwt))
 		render.Render(w, r, &LoginResponse{jwt})
 	}
 }
